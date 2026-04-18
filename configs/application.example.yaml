@@ -1,0 +1,23 @@
+# ZeroTrust Sentinel - 示例配置文件
+# 使用前请将此文件复制并重命名为 application.yaml，填入你本地的真实配置
+
+server:
+  port: 8080
+  mode: debug
+
+database:
+  mysql:
+    host: "127.0.0.1"
+    port: 3306
+    user: "root"
+    password: "YOUR_MYSQL_PASSWORD_HERE" # ⚠️ 请填入你的真实密码
+    dbname: "goai_interviewer"
+
+redis:
+  host: "127.0.0.1"
+  port: 6379
+  password: "" # ⚠️ 如果有密码请填入
+
+llm:
+  api_key: "sk-xxxxxxxxx" # ⚠️ 填入你的大模型 API Key
+  base_url: "https://api.deepseek.com/v1"

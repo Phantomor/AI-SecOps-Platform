@@ -1,12 +1,19 @@
-# === Go Backend () ===
-/bin/
-/tmp/
-/*.exe
-/configs/*.yaml 
-!/configs/application.example.yaml # 仅放行示例配置文件
-/docs/docs.go # 如果使用 swaggo，可以选择忽略每次变动的文档
+# === Go Backend Configs ===
+configs/*.yaml
+!configs/*.example.yaml
 
-# === Vue Frontend (sentinel-terminal) ===
+# === Go Build & Runtime ===
+bin/
+tmp/
+*.exe
+sqlite_mcp_server.db
+
+# === Go Docs (可选：避免每次编译接口都产生 Git 变更) ===
+docs/docs.go
+docs/swagger.json
+docs/swagger.yaml
+
+# === Vue Frontend (Nested) ===
 sentinel-terminal/node_modules/
 sentinel-terminal/dist/
 sentinel-terminal/.env.local
@@ -16,4 +23,3 @@ sentinel-terminal/.env.local
 .idea/
 .vscode/
 *.log
-*.db # 忽略本地测试用的 SQLite 数据库文件
