@@ -1,0 +1,19 @@
+# === Go Backend () ===
+/bin/
+/tmp/
+/*.exe
+/configs/*.yaml 
+!/configs/application.example.yaml # 仅放行示例配置文件
+/docs/docs.go # 如果使用 swaggo，可以选择忽略每次变动的文档
+
+# === Vue Frontend (sentinel-terminal) ===
+sentinel-terminal/node_modules/
+sentinel-terminal/dist/
+sentinel-terminal/.env.local
+
+# === System & IDE ===
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.db # 忽略本地测试用的 SQLite 数据库文件
