@@ -30,7 +30,7 @@ import (
 // CorsMiddleware 企业级动态跨域中间件
 func CorsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 🌟 核心修复：动态获取前端的 Origin，而不是写死 "*"
+		// 动态获取前端的 Origin，而不是写死 "*"
 		origin := c.Request.Header.Get("Origin")
 		if origin != "" {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
@@ -78,7 +78,7 @@ func main() {
 
 	// 启动后台消费者监听协程
 	worker.StartDocParserWorker()
-	// 🌟 新增：启动 MCP Client，疯狂吸收外部工具！
+	// ：启动 MCP Client，疯狂吸收外部工具！
 	mcp.StartMCPClient()
 
 	// 2. 设置 Gin 运行模式 (从配置读取 debug 或 release)
@@ -88,7 +88,7 @@ func main() {
 	// Default() 会默认包含 Logger 和 Recovery 中间件，保证程序崩溃时能自动恢复并记录日志
 	r := gin.Default()
 
-	// 🌟 注册 MCP Server
+	// 注册 MCP Server
 	mcp.RegisterMCPServer()
 	// 注册 Swagger 路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

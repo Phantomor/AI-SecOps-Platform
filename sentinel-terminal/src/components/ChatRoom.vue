@@ -230,10 +230,10 @@ onMounted(scrollToBottom)
   border-radius: 2px;
   position: relative;
   word-wrap: break-word;
-  word-break: break-word; /* 新增：允许在单词内换行 */
+  word-break: break-word; /* ：允许在单词内换行 */
   min-width: 150px; 
-  max-width: 100%;        /* 新增：限制最大宽度不超过父级 */
-  overflow-x: auto;       /* 新增：超长内容在气泡内部出现滚动条 */
+  max-width: 100%;        /* ：限制最大宽度不超过父级 */
+  overflow-x: auto;       /* ：超长内容在气泡内部出现滚动条 */
   line-height: 1.6;
 }
 /* 用户指令泡泡 */
@@ -353,11 +353,11 @@ onMounted(scrollToBottom)
 
 /* 赛博朋克表格 */
 :deep(.markdown-body table) {
-  display: block;         /* 新增：将表格变为块级容器 */
-  overflow-x: auto;       /* 新增：允许表格横向滑动 */
+  display: block;         /* ：将表格变为块级容器 */
+  overflow-x: auto;       /* ：允许表格横向滑动 */
   border-collapse: collapse;
   width: 100%;
-  max-width: 100%;        /* 新增：最大宽度限制 */
+  max-width: 100%;        /* ：最大宽度限制 */
   margin: 15px 0;
   background-color: rgba(0, 20, 0, 0.3);
   /* 自定义表格的极客滚动条 */

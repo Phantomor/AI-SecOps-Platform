@@ -23,8 +23,8 @@ var _ agent.Tool = (*TerminalOperationTool)(nil)
 func (t *TerminalOperationTool) Info() *schema.ToolInfo {
 	return &schema.ToolInfo{
 		Name: "execute_go_code",
-		// 🌟 优化1：在描述中明确限制大模型只能使用标准库，防止它引用第三方包导致编译失败
-		Desc: "在终端中编译并运行候选人提交的 Go 语言代码。返回标准输出(stdout)或错误信息(stderr)。注意：当前沙箱环境无 go.mod，仅允许使用 Go 原生标准库，禁止 import 任何第三方依赖！",
+		// 优化1：在描述中明确限制大模型只能使用标准库，防止它引用第三方包导致编译失败
+		Desc: "在安全的隔离沙箱中编译并运行 Go 代码。常用于运行安全验证脚本 (PoC)、加密算法逆向分析或数据包特征提取。当前环境仅限标准库。",
 		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
 			"code": {Type: schema.String, Desc: "完整的 Go 语言源代码文本", Required: true},
 		}),
@@ -57,10 +57,10 @@ func (t *TerminalOperationTool) Execute(args string) (string, error) {
 
 	cmd := exec.CommandContext(ctx, "go", "run", "main.go") // 这里直接写 main.go 即可，因为下面切换了执行目录
 
-	// 🌟 优化2：将工作目录切换到临时目录！防止大模型代码越权访问你主项目的文件
+	// 优化2：将工作目录切换到临时目录！防止大模型代码越权访问你主项目的文件
 	cmd.Dir = tmpDir
 
-	// 🌟 优化3：清理环境变量！只保留 PATH 和基本的 Go 环境变量，防止主程序的 API Key/数据库密码被恶意读取
+	// 优化3：清理环境变量！只保留 PATH 和基本的 Go 环境变量，防止主程序的 API Key/数据库密码被恶意读取
 	safeEnv := []string{
 		"PATH=" + os.Getenv("PATH"),
 		"GOPATH=" + os.Getenv("GOPATH"),
@@ -83,7 +83,7 @@ func (t *TerminalOperationTool) Execute(args string) (string, error) {
 	}
 
 	if err != nil {
-		// 🌟 优化4：有时候 panic 信息不仅在 stderr，也可能在 stdout。合并输出能给大模型提供更完整的报错上下文
+		// 优化4：有时候 panic 信息不仅在 stderr，也可能在 stdout。合并输出能给大模型提供更完整的报错上下文
 		return fmt.Errorf("代码运行报错:\n%s\n部分标准输出:\n%s", stderr.String(), stdout.String()).Error(), nil
 	}
 

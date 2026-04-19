@@ -23,7 +23,7 @@ request.interceptors.response.use(
   error => Promise.reject(error)
 )
 
-// === 🚀 核心修复：非阻塞式的 SSE 流式接收函数 ===
+// === 非阻塞式的 SSE 流式接收函数 ===
 export const connectSSE = (url, params, onMessage, onError) => {
   const fullUrl = `${API_BASE_URL}${url}`
   const abortController = new AbortController()
@@ -43,7 +43,7 @@ export const connectSSE = (url, params, onMessage, onError) => {
 
     while (true) {
       const { done, value } = await reader.read();
-      // 🌟 核心修复：如果底层 TCP 连接结束了，无论有没有收到 [DONE]，都强制关闭光标
+      // 如果底层 TCP 连接结束了，无论有没有收到 [DONE]，都强制关闭光标
       if (done) {
         if (onMessage) onMessage('[DONE]');
         break;

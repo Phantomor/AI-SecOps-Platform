@@ -46,7 +46,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  // 新增：实时校验后端 session 登录态
+  // ：实时校验后端 session 登录态
   const checkLoginState = async () => {
     try {
       const user = await getLoginUser()

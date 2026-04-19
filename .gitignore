@@ -6,7 +6,14 @@ configs/*.yaml
 bin/
 tmp/
 *.exe
-sqlite_mcp_server.db
+
+# 文档信息不要上传
+generate_mock_data.py
+*.db
+*.sqlite
+*.sqlite3
+*.pdf
+assets/knowledge/*
 
 # === Go Docs (可选：避免每次编译接口都产生 Git 变更) ===
 docs/docs.go

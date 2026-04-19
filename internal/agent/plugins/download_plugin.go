@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url" // 新增引入
+	"net/url" // 引入
 	"os"
 	"path/filepath"
 	"time"
@@ -40,14 +40,14 @@ func (t *ResourceDownloadTool) Execute(args string) (string, error) {
 		return "", fmt.Errorf("参数解析失败: %v", err)
 	}
 
-	// 🌟 核心修复 1：创建带有真实 User-Agent 的请求，防止被目标服务器拒绝
+	// 1：创建带有真实 User-Agent 的请求，防止被目标服务器拒绝
 	req, err := http.NewRequest("GET", params.URL, nil)
 	if err != nil {
 		return "", fmt.Errorf("创建请求失败: %v", err)
 	}
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
-	// 🌟 核心修复 2：配置代理和超时时间 (下载文件给 30 秒)
+	// 2：配置代理和超时时间 (下载文件给 30 秒)
 	proxyURL, _ := url.Parse("http://127.0.0.1:7890")
 	client := &http.Client{
 		Transport: &http.Transport{
@@ -63,7 +63,7 @@ func (t *ResourceDownloadTool) Execute(args string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// 🌟 核心修复 3：优雅处理错误状态码，把 404/403 等信息返回给大模型，让它知道换个链接
+	// 3：优雅处理错误状态码，把 404/403 等信息返回给大模型，让它知道换个链接
 	if resp.StatusCode != 200 {
 		return fmt.Sprintf("下载失败：目标 URL 返回了 HTTP 状态码 %d。请检查该文件链接是否有效或尝试寻找其他下载地址。", resp.StatusCode), nil
 	}

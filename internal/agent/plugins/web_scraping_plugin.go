@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url" // 新增引入
+	"net/url" // 引入
 	"strings"
-	"time" // 新增引入
+	"time" // 引入
 
 	"sentinel-agent-go/internal/agent"
 
@@ -22,7 +22,7 @@ var _ agent.Tool = (*WebScrapingTool)(nil)
 func (t *WebScrapingTool) Info() *schema.ToolInfo {
 	return &schema.ToolInfo{
 		Name: "web_scrape",
-		Desc: "访问指定的 URL 并抓取网页的纯文本正文内容。当需要深入阅读某个具体的网页或文章时使用此工具。",
+		Desc: "用于联网搜索最新的网络安全资讯、CVE 漏洞情报或黑客攻击分析报告。",
 		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
 			"url": {Type: schema.String, Desc: "需要抓取的网页完整 URL，例如 https://xxx.com", Required: true},
 		}),
@@ -44,7 +44,7 @@ func (t *WebScrapingTool) Execute(args string) (string, error) {
 	// 使用更逼真的 User-Agent
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
-	// 🌟 核心修复 1：为网页抓取也加上代理和超时时间
+	// 1：为网页抓取也加上代理和超时时间
 	proxyURL, _ := url.Parse("http://127.0.0.1:7890")
 	client := &http.Client{
 		Transport: &http.Transport{
@@ -59,7 +59,7 @@ func (t *WebScrapingTool) Execute(args string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// 🌟 核心修复 2：优雅处理 404 等错误，把结果告诉 AI，让 AI 自己决定下一步
+	// 2：优雅处理 404 等错误，把结果告诉 AI，让 AI 自己决定下一步
 	if resp.StatusCode != 200 {
 		return fmt.Sprintf("抓取失败：目标网页返回了 HTTP 状态码 %d。该链接可能失效或存在反爬策略，请尝试搜索并抓取其他相关链接。", resp.StatusCode), nil
 	}

@@ -22,7 +22,7 @@ var _ agent.Tool = (*WebSearchTool)(nil)
 func (t *WebSearchTool) Info() *schema.ToolInfo {
 	return &schema.ToolInfo{
 		Name: "web_search",
-		Desc: "查询实时信息时调用此工具。它会返回搜索引擎的前几条结果，包含【标题】、【链接(URL)】和【摘要】。",
+		Desc: "用于联网搜索最新安全资讯、CVE漏洞或技术文档。⚠️【格式警告】必须且只能输出标准的、扁平化的 JSON 格式，绝不允许嵌套额外的 args_json 字段，必须严格匹配参数表！",
 		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
 			"query": {Type: schema.String, Desc: "要搜索的关键词", Required: true},
 		}),
@@ -65,7 +65,7 @@ func (t *WebSearchTool) Execute(args string) (string, error) {
 	results.WriteString(fmt.Sprintf("关于 '%s' 的搜索结果：\n\n", params.Query))
 
 	count := 0
-	// 🌟 核心修复：解析 DuckDuckGo 的整体 result 块，提取出 标题、摘要 和 URL
+	// 解析 DuckDuckGo 的整体 result 块，提取出 标题、摘要 和 URL
 	doc.Find(".result").Each(func(i int, s *goquery.Selection) {
 		if count < 4 { // 提取 4 条，给大模型更多选择
 			title := strings.TrimSpace(s.Find(".result__title").Text())

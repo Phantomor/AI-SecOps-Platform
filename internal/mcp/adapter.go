@@ -42,7 +42,7 @@ func RegisterMCPServer() {
 				return mcp.NewToolResultError("工具未找到: " + request.Params.Name), nil
 			}
 
-			// 🌟 修复 1：安全地处理 any 类型的类型断言
+			// 修复 1：安全地处理 any 类型的类型断言
 			var argsStr string
 			if argsMap, ok := request.Params.Arguments.(map[string]interface{}); ok {
 				// 尝试提取 params_json
@@ -71,7 +71,7 @@ func RegisterMCPServer() {
 		})
 	}
 
-	// 🌟 修复 2 & 3：使用库自带的方法独立启动，避免与 Gin 框架的路由冲突
+	// 修复 2 & 3：使用库自带的方法独立启动，避免与 Gin 框架的路由冲突
 	// WithBaseURL 必须配置，这是客户端(Cursor)发 POST 消息的目标地址
 	sseServer := server.NewSSEServer(s, server.WithBaseURL("http://localhost:8081"))
 

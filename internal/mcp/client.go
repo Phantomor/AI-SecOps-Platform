@@ -28,19 +28,29 @@ func (t *ExternalMCPTool) Info() *schema.ToolInfo {
 
 // Execute 拦截大模型的调用，转发给外部的 MCP Server
 func (t *ExternalMCPTool) Execute(args string) (string, error) {
-	// 1. 大模型传过来的是包含了 args_json 的包装层
+	var realParams map[string]interface{}
+
+	// 1. 尝试按我们定义的 args_json 包装层解析
 	var wrapper struct {
 		ArgsJson string `json:"args_json"`
 	}
-	if err := json.Unmarshal([]byte(args), &wrapper); err != nil {
-		return "", fmt.Errorf("参数解析失败: %v", err)
+
+	err := json.Unmarshal([]byte(args), &wrapper)
+	if err == nil && wrapper.ArgsJson != "" {
+		// 方式 A: 乖乖听话的模型，传了 args_json
+		json.Unmarshal([]byte(wrapper.ArgsJson), &realParams)
+	} else {
+		// 方式 B (兜底): 叛逆的模型，直接传了平铺的参数或空对象 "{}"
+		err = json.Unmarshal([]byte(args), &realParams)
+		if err != nil {
+			// 极端情况: 传了无法解析的乱码或空字符串
+			realParams = make(map[string]interface{})
+		}
 	}
 
-	// 2. 解析出真正的参数字典
-	var realParams map[string]interface{}
-	if err := json.Unmarshal([]byte(wrapper.ArgsJson), &realParams); err != nil {
-		// 兜底：如果大模型直接传了平铺的 JSON
-		json.Unmarshal([]byte(args), &realParams)
+	// 确保无论如何都有一个合法的 map 传给外部工具
+	if realParams == nil {
+		realParams = make(map[string]interface{})
 	}
 
 	// 3. 组装 MCP 标准请求并发送给外部 Server
@@ -69,9 +79,13 @@ func StartMCPClient() {
 	// 1. 通过 Stdio (标准输入输出) 连接官方的 SQLite MCP Server
 	// 命令等价于：npx -y @modelcontextprotocol/server-sqlite /tmp/test.db
 
+	serverBin := "/home/pvr1sc/.local/bin/mcp-server-sqlite"
+
 	mcpClient, err := client.NewStdioMCPClient(
-		"/home/pvr1sc/.local/bin/mcp-server-sqlite", // ⚠️ 务必替换为你自己真实的绝对路径！
-		[]string{"--db-path", "/tmp/test.db"},
+		serverBin,
+		nil,
+		"--db-path",
+		"mcp.db", // 彻底抛弃 /tmp 绝对路径，使用相对路径！
 	)
 	if err != nil {
 		log.Printf("❌ 启动外部 MCP Client 失败: %v", err)

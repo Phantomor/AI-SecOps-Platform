@@ -20,7 +20,7 @@ var _ agent.Tool = (*PDFReportTool)(nil)
 func (t *PDFReportTool) Info() *schema.ToolInfo {
 	return &schema.ToolInfo{
 		Name: "generate_pdf_report",
-		Desc: "用于生成候选人的面试 PDF 报告。当用户输入中包含'生成报告'、'导出PDF'等意图时，必须调用此工具。",
+		Desc: "用于生成《ZeroTrust 终端安全研判报告》(PDF格式)。当用户要求“生成安全报告”、“导出审计PDF”或分析流程结束时，必须调用此工具。",
 		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
 			"candidate_name": {Type: schema.String, Desc: "候选人的名字", Required: true},
 			"comments":       {Type: schema.String, Desc: "面试评价、打分和总结", Required: true},

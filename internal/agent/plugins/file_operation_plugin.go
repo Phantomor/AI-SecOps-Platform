@@ -20,7 +20,7 @@ var _ agent.Tool = (*FileOperationTool)(nil)
 func (t *FileOperationTool) Info() *schema.ToolInfo {
 	return &schema.ToolInfo{
 		Name: "file_operation",
-		Desc: "用于读取或写入本地文件内容。支持 'read' 和 'write' 两种操作。",
+		Desc: "用于读取或写入本地文本文件。⚠️禁止使用此工具读取 .db 或数据库文件，数据库操作必须使用 ext_sqlite 系列工具。",
 		ParamsOneOf: schema.NewParamsOneOfByParams(map[string]*schema.ParameterInfo{
 			"action":    {Type: schema.String, Desc: "操作类型: 'read' 或 'write'", Required: true},
 			"file_path": {Type: schema.String, Desc: "文件的绝对路径或相对路径", Required: true},

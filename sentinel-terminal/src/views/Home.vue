@@ -80,9 +80,9 @@ const navigateTo = (path) => {
 .home-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* 🌟 确保背景至少铺满一屏 */
-  height: auto;      /* 🌟 允许高度根据内容自动增加 */
-  overflow-y: visible; /* 🌟 确保首页可以正常滚动 */
+  min-height: 100vh; /* 确保背景至少铺满一屏 */
+  height: auto;      /* 允许高度根据内容自动增加 */
+  overflow-y: visible; /* 确保首页可以正常滚动 */
   background-color: var(--bg-deep);
 }
 
